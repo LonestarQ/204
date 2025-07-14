@@ -1,0 +1,1536 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>204大帝国</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+
+        /* 编辑状态指示器 */
+        .editing-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #3498db;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            z-index: 10;
+        }
+
+
+
+
+
+
+        /* 提取公共悬停效果类 */
+        .hover-effect {
+            transition: all 0.3s;
+        }
+
+        .hover-effect:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+        /* 保持原有样式不变 */
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --text-color: #333;
+            --light-bg: #f8f9fa;
+            --expired-color: #ffebee;
+            --subject-bg: #f0f7ff;
+            --subject-border: #3498db;
+            --file-bg: #e8f4ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', '微软雅黑', sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: #f5f7fa;
+        }
+
+        .navbar {
+            background: var(--primary-color);
+            padding: 1rem 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--secondary-color);
+        }
+
+        .header {
+            margin-top: 80px;
+            padding: 2rem 5% 3rem;
+            background: var(--light-bg);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.1) 0%, rgba(236, 240, 241, 0.8) 100%);
+            z-index: -1;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+            border: 3px solid var(--secondary-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            background: linear-gradient(45deg, #3498db, #2c3e50);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .card-form {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            position: relative;
+            z-index: 2;
+        }
+
+        .form-title {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .form-title::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--secondary-color);
+            border-radius: 3px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group input, 
+        .form-group textarea {
+            width: 100%;
+            padding: 0.9rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus, 
+        .form-group textarea:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-footer {
+            display: flex;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.9rem 2.2rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background-color: var(--secondary-color);
+            color: white;
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+            /* 应用公共悬停效果类 */
+            transition: all 0.3s;
+        }
+
+        /* 合并重复的:hover样式 */
+        .btn-primary:hover {
+            background-color: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-delete {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background-color: #c0392b;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto 4rem;
+            padding: 0 5%;
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 2rem;
+        }
+
+        .subject-group {
+            background: var(--subject-bg);
+            border: 1px solid var(--subject-border);
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        .subject-header {
+            padding: 1.2rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            background: rgba(52, 152, 219, 0.1);
+            transition: background 0.3s;
+        }
+
+        .subject-header:hover {
+            background: rgba(52, 152, 219, 0.15);
+        }
+
+        .subject-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .subject-count {
+            background: var(--secondary-color);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .toggle-icon {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            transition: transform 0.3s;
+        }
+
+        .subject-content {
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .article-card {
+            background: white;
+            padding: 1.8rem;
+            border-radius: 8px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            position: relative;
+            border-top: 3px solid var(--secondary-color);
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-time {
+            font-size: 0.9rem;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .card-subject {
+            background-color: #e1f5fe;
+            color: #0288d1;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .card-actions {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #e74c3c;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .delete-btn:hover {
+            background-color: rgba(231, 76, 60, 0.1);
+            transform: scale(1.1);
+        }
+
+        .edit-btn {
+            background: none;
+            border: none;
+            color: #3498db;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .edit-btn:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+            transform: scale(1.1);
+        }
+
+        .article-card h2 {
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            font-size: 1.4rem;
+            line-height: 1.4;
+        }
+
+        .article-card p {
+            margin-bottom: 1.5rem;
+            color: #555;
+            line-height: 1.7;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .meta {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sidebar {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar h3 {
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            font-size: 1.4rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid var(--secondary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar p {
+            margin-bottom: 1.5rem;
+            color: #555;
+            line-height: 1.7;
+        }
+
+        .stats {
+            background-color: #f8f9fa;
+            padding: 1.2rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stat-value {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            justify-content: center;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            background: #f0f7ff;
+            border-radius: 50%;
+            color: var(--primary-color);
+            font-size: 1.3rem;
+            /* 应用公共悬停效果类 */
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--secondary-color);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-top: 1.5rem;
+        }
+
+        .empty-state i {
+            font-size: 3.5rem;
+            color: #bdc3c7;
+            margin-bottom: 1.2rem;
+        }
+
+        .empty-state h3 {
+            color: #7f8c8d;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .empty-state p {
+            color: #95a5a6;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* 新增附件相关样式 */
+        .attachment-group {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px dashed #ddd;
+        }
+
+        .attachment-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .file-input-container {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .file-input-label {
+            display: block;
+            padding: 0.9rem;
+            border: 2px dashed #3498db;
+            border-radius: 6px;
+            background-color: var(--file-bg);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-input-label:hover {
+            background-color: #d1e8ff;
+        }
+
+        .file-input-label i {
+            margin-right: 8px;
+            color: #3498db;
+        }
+
+        #file-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-list {
+            display: grid;
+            gap: 0.8rem;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            border: 1px solid #eee;
+        }
+
+        .file-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+            color: #3498db;
+        }
+
+        .file-info {
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        .file-name {
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .file-size {
+            font-size: 0.8rem;
+            color: #777;
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .file-delete {
+            background: none;
+            border: none;
+            color: #e74c3c;
+            cursor: pointer;
+            font-size: 1rem;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .file-delete:hover {
+            background-color: rgba(231, 76, 60, 0.1);
+        }
+
+        .card-attachments {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .attachments-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .attachment-item {
+            display: flex;
+            align-items: center;
+            padding: 0.6rem 0.8rem;
+            background-color: #f0f7ff;
+            border-radius: 6px;
+            margin-bottom: 0.6rem;
+            transition: all 0.2s;
+        }
+
+        .attachment-item:hover {
+            background-color: #e1f0ff;
+        }
+
+        .attachment-icon {
+            margin-right: 10px;
+            font-size: 1.1rem;
+            color: #3498db;
+        }
+
+        .attachment-name {
+            flex-grow: 1;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .attachment-download {
+            color: #3498db;
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 0.3rem;
+            cursor: pointer;
+        }
+
+        .attachment-view {
+            color: #2ecc71;
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 0.3rem;
+            cursor: pointer;
+        }
+
+        .attachment-download:hover {
+            color: #2980b9;
+        }
+        
+        .attachment-view:hover {
+            color: #27ae60;
+        }
+
+        /* 文件类型图标颜色 */
+        .file-icon.image { color: #e74c3c; }
+        .file-icon.archive { color: #f39c12; }
+        .file-icon.code { color: #3498db; }
+        .file-icon.document { color: #2ecc71; }
+        .file-icon.other { color: #9b59b6; }
+
+        /* 图片预览模态框 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            overflow: auto;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 90%;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #bbb;
+        }
+
+        /* 通知样式 */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background-color: #2ecc71;
+            color: white;
+            border-radius: 5px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 3000;
+            transform: translateX(150%);
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            background-color: #e74c3c;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+          
+            .nav-links {
+                display: none;
+            }
+
+            .sidebar {
+                position: static;
+                margin-top: 1rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .attachment-group {
+                grid-column: span 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                margin-top: 60px;
+                padding: 1.5rem 5%;
+            }
+            
+            .avatar {
+                width: 90px;
+                height: 90px;
+                font-size: 2rem;
+            }
+            
+            .card-form {
+                padding: 1.2rem;
+            }
+            
+            .form-title {
+                font-size: 1.5rem;
+            }
+            
+            .subject-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .article-card {
+                padding: 1.5rem;
+            }
+            
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="#" class="logo">二零四内网</a>
+        </div>
+    </nav>
+
+    <header class="header">
+        <div class="avatar">204</div>
+        <h1>204大帝国</h1>
+        <p>大声叫爹，自动连接 内网专属</p>
+    </header>
+
+    <section class="card-form">
+        <h2 class="form-title"><i class="fas fa-plus-circle"></i> 添加新作业</h2>
+        <div id="editing-indicator" class="editing-indicator" style="display: none;">
+            <i class="fas fa-edit"></i> 编辑模式
+        </div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="time-input"><i class="far fa-calendar"></i> 布置时间</label>
+                <input type="text" id="time-input" placeholder="例如：2025年6月3日">
+            </div>
+            <div class="form-group">
+                <label for="subject-input"><i class="fas fa-bookmark"></i> 科目类型</label>
+                <input type="text" id="subject-input" placeholder="例如：高等数学、大学英语">
+            </div>
+            <div class="form-group">
+                <label for="title-input"><i class="fas fa-heading"></i> 作业标题</label>
+                <input type="text" id="title-input" placeholder="输入作业标题">
+            </div>
+            <div class="form-group">
+                <label for="content-input"><i class="fas fa-align-left"></i> 作业内容</label>
+                <textarea id="content-input" placeholder="描述作业要求..."></textarea>
+            </div>
+            
+            <!-- 新增附件上传区域 -->
+            <div class="form-group" style="grid-column: span 2;">
+                <div class="attachment-group">
+                    <div class="attachment-title">
+                        <i class="fas fa-paperclip"></i> 相关附件
+                    </div>
+                    
+                    <div class="file-input-container">
+                        <label class="file-input-label">
+                            <i class="fas fa-cloud-upload-alt"></i> 
+                            点击或拖拽文件到此处上传（支持多种格式）
+                        </label>
+                        <input type="file" id="file-input" multiple>
+                    </div>
+                    
+                    <div class="file-list" id="file-list">
+                        <!-- 文件列表将在这里动态生成 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-footer">
+            <button class="btn btn-primary" id="add-card-btn">
+                <i class="fas fa-plus"></i> 添加作业卡片
+            </button>
+        </div>
+    </section>
+
+    <div class="container">
+        <main id="cards-container">
+            <!-- 科目分组将通过JS动态生成 -->
+        </main>
+
+        <aside class="sidebar">
+            <h3><i class="fas fa-info-circle"></i> 作业统计</h3>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-label"><i class="fas fa-book"></i> 总作业数</span>
+                    <span class="stat-value" id="total-count">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label"><i class="fas fa-folder-open"></i> 科目分类</span>
+                    <span class="stat-value" id="subject-count">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label"><i class="fas fa-paperclip"></i> 带附件作业</span>
+                    <span class="stat-value" id="attachment-count">0</span>
+                </div>
+            </div>
+            
+            <h3><i class="fas fa-lightbulb"></i> 使用提示</h3>
+            <p>1. 按科目分类组织作业，点击科目标题可折叠/展开</p>
+            <p>2. 支持上传多种格式的作业附件（图片、文档、代码、压缩包等）</p>
+            <p>3. 所有数据保存在服务器端，刷新页面不会丢失</p>
+            <p>4. 可随时添加、删除和修改作业</p>
+            
+            <div class="social-links">
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-weixin"></i></a>
+                <a href="#"><i class="fab fa-qq"></i></a>
+                <a href="#"><i class="fas fa-envelope"></i></a>
+            </div>
+        </aside>
+    </div>
+
+    <!-- 图片预览模态框 -->
+    <div id="image-modal" class="modal">
+        <span class="close-btn">&times;</span>
+        <img class="modal-content" id="modal-image">
+    </div>
+
+    <!-- 通知区域 -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+
+        // 添加全局变量
+        let editingHomeworkId = null;
+        let homeworkData = {};
+
+        // 全局配置 - 使用相对路径
+        const API_BASE_URL = window.location.origin + '/api';
+
+
+        // 在脚本开头添加全局变量
+        let homeworkFileHandle = null;
+
+        // 存储当前选择的文件
+        let selectedFiles = [];
+
+        // 使用localStorage存储作业数据
+        const HOMEWORK_DATA_KEY = 'homeworkData';
+        const SUBJECT_STATE_KEY = 'subjectState';
+
+        // 页面加载时渲染数据
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchData();
+            setupFileHandlers();
+
+            // 添加作业事件
+            document.getElementById('add-card-btn').addEventListener('click', function() {
+                addHomework();
+            });
+
+            // 设置图片预览模态框事件
+            setupImageModal();
+        });
+
+        // 设置图片预览模态框
+        function setupImageModal() {
+            const modal = document.getElementById('image-modal');
+            const closeBtn = document.querySelector('.close-btn');
+            
+            // 点击关闭按钮
+            closeBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+            
+            // 点击模态框背景关闭
+            function handleModalClick(e) {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            }
+            modal.addEventListener('click', handleModalClick);
+
+            window.addEventListener('beforeunload', () => {
+                modal.removeEventListener('click', handleModalClick);
+            });
+            
+            // ESC键关闭
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.style.display === 'block') {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+
+        // 设置文件处理相关事件
+        function setupFileHandlers() {
+            const fileInput = document.getElementById('file-input');
+            const fileList = document.getElementById('file-list');
+            
+            // 处理文件选择
+            fileInput.addEventListener('change', function(e) {
+                const files = Array.from(e.target.files);
+                
+                // 过滤掉重复文件
+                const newFiles = files.filter(file => 
+                    !selectedFiles.some(f => f.name === file.name && f.size === file.size)
+                );
+                
+                // 添加到已选文件列表
+                selectedFiles = selectedFiles.concat(newFiles);
+                
+                // 更新文件列表显示
+                renderFileList();
+            });
+            
+            // 拖拽事件处理
+            const dropZone = document.querySelector('.file-input-label');
+            dropZone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                dropZone.style.backgroundColor = '#d1e8ff';
+                dropZone.style.borderColor = '#2980b9';
+            });
+            
+            dropZone.addEventListener('dragleave', function() {
+                dropZone.style.backgroundColor = '';
+                dropZone.style.borderColor = '';
+            });
+            
+            dropZone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                dropZone.style.backgroundColor = '';
+                dropZone.style.borderColor = '';
+                
+                const files = Array.from(e.dataTransfer.files);
+                
+                // 过滤掉重复文件
+                const newFiles = files.filter(file => 
+                    !selectedFiles.some(f => f.name === file.name && f.size === file.size)
+                );
+                
+                // 添加到已选文件列表
+                selectedFiles = selectedFiles.concat(newFiles);
+                
+                // 更新文件列表显示
+                renderFileList();
+            });
+        }
+        
+        // 渲染文件列表
+        function renderFileList() {
+            const fileList = document.getElementById('file-list');
+            fileList.innerHTML = '';
+            
+            if (selectedFiles.length === 0) {
+                fileList.innerHTML = '<div class="empty-file-list">暂无文件</div>';
+                return;
+            }
+            
+            selectedFiles.forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                
+                // 获取文件类型图标
+                const fileType = getFileType(file.name);
+                
+                fileItem.innerHTML = `
+                    <div class="file-icon ${fileType}">
+                        <i class="${getFileIcon(file.name)}"></i>
+                    </div>
+                    <div class="file-info">
+                        <div class="file-name">${file.name}</div>
+                        <div class="file-size">${formatFileSize(file.size)}</div>
+                    </div>
+                    <div class="file-actions">
+                        <button class="file-delete" data-index="${index}">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+                
+                fileList.appendChild(fileItem);
+            });
+            
+            // 添加删除事件
+            document.querySelectorAll('.file-delete').forEach(button => {
+                button.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    selectedFiles.splice(index, 1);
+                    renderFileList();
+                });
+            });
+        }
+        
+        // 获取文件类型
+        function getFileType(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            
+            if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(ext)) {
+                return 'image';
+            }
+            if (['zip', 'rar', '7z', 'tar', 'gz'].includes(ext)) {
+                return 'archive';
+            }
+            if (['doc', 'docx', 'pdf', 'txt', 'rtf'].includes(ext)) {
+                return 'document';
+            }
+            if (['cpp', 'c', 'h', 'hpp', 'js', 'java', 'py', 'html', 'css', 'php', 'cs', 'go', 'rs', 'ts'].includes(ext)) {
+                return 'code';
+            }
+            return 'other';
+        }
+        
+        // 获取文件图标
+        function getFileIcon(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            
+            if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(ext)) {
+                return 'fas fa-file-image';
+            }
+            if (['zip', 'rar', '7z', 'tar', 'gz'].includes(ext)) {
+                return 'fas fa-file-archive';
+            }
+            if (['doc', 'docx'].includes(ext)) {
+                return 'fas fa-file-word';
+            }
+            if (['pdf'].includes(ext)) {
+                return 'fas fa-file-pdf';
+            }
+            if (['xls', 'xlsx'].includes(ext)) {
+                return 'fas fa-file-excel';
+            }
+            if (['ppt', 'pptx'].includes(ext)) {
+                return 'fas fa-file-powerpoint';
+            }
+            if (['txt', 'rtf'].includes(ext)) {
+                return 'fas fa-file-alt';
+            }
+            if (['cpp', 'c', 'h', 'hpp'].includes(ext)) {
+                return 'fas fa-file-code';
+            }
+            if (['js', 'ts'].includes(ext)) {
+                return 'fab fa-js';
+            }
+            if (['java'].includes(ext)) {
+                return 'fab fa-java';
+            }
+            if (['py'].includes(ext)) {
+                return 'fab fa-python';
+            }
+            if (['php'].includes(ext)) {
+                return 'fab fa-php';
+            }
+            return 'fas fa-file';
+        }
+        
+        // 格式化文件大小
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        // 修改 addHomework 函数
+        async function addHomework() {
+            document.getElementById('editing-indicator').style.display = 'none';
+            const timeInput = document.getElementById('time-input').value.trim();
+            const subjectInput = document.getElementById('subject-input').value.trim();
+            const titleInput = document.getElementById('title-input').value.trim();
+            const contentInput = document.getElementById('content-input').value.trim();
+            
+            if (!timeInput || !subjectInput || !titleInput || !contentInput) {
+                showNotification('请填写所有必填字段！', true);
+                return;
+            }
+            // 构建FormData对象
+            const formData = new FormData();
+            formData.append('time', timeInput);
+            formData.append('subject', subjectInput);
+            formData.append('title', titleInput);
+            formData.append('content', contentInput);
+            
+            // 添加文件
+            selectedFiles.forEach(file => {
+                formData.append('attachments', file);
+            });
+            
+            try {
+                let response;
+                if (editingHomeworkId) {
+                    response = await fetch(`${API_BASE_URL}/homeworks/${editingHomeworkId}`, {
+                        method: 'PUT',
+                        body: formData
+                    });
+                } else {
+                    response = await fetch(`${API_BASE_URL}/homeworks`, {
+                        method: 'POST',
+                        body: formData
+                    });
+                }
+                // 检查响应状态
+                if (!response.ok) {
+                    // 读取错误信息而不解析为JSON
+                    const errorText = await response.text();
+                    throw new Error(errorText);
+                }
+                // 解析成功响应
+                const result = await response.json();
+                
+                // 清空表单
+                document.getElementById('time-input').value = '';
+                document.getElementById('subject-input').value = '';
+                document.getElementById('title-input').value = '';
+                document.getElementById('content-input').value = '';
+                selectedFiles = [];
+                renderFileList();
+                
+                // 重置编辑状态
+                editingHomeworkId = null;
+                
+                // 更新按钮文本
+                document.getElementById('add-card-btn').innerHTML = 
+                    '<i class="fas fa-plus"></i> 添加作业卡片';
+                
+                // 显示通知
+                const message = editingHomeworkId ? 
+                    `"${titleInput}" 已更新` : 
+                    `"${titleInput}" 已添加到 ${subjectInput}`;
+                
+                showNotification(message);
+                
+                // 刷新数据
+                fetchData();
+            } catch (error) {
+                showNotification(`操作失败: ${error.message}`, true);
+            }
+        }
+
+        // 修改 deleteHomework 函数
+        async function deleteHomework(id) {
+            if (!confirm('确定删除此作业吗？')) return;
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/homeworks/${id}`, {
+                    method: 'DELETE'
+                });
+                
+                if (!response.ok) throw new Error('删除失败');
+                
+                // 如果是编辑状态删除当前作业，重置编辑状态
+                if (editingHomeworkId === id) {
+                    editingHomeworkId = null;
+                    document.getElementById('add-card-btn').innerHTML = 
+                        '<i class="fas fa-plus"></i> 添加作业卡片';
+                }
+                
+                showNotification('作业已删除');
+                fetchData();
+            } catch (error) {
+                showNotification(error.message, true);
+            }
+        }
+
+        // 修改 editHomework 函数
+        async function editHomework(id) {
+            document.getElementById('editing-indicator').style.display = 'block';
+            try {
+                // 查找作业数据
+                for (const subject in homeworkData) {
+                    const homework = homeworkData[subject].homeworks.find(hw => hw.id === id);
+                    if (homework) {
+                        // 填充表单
+                        document.getElementById('time-input').value = homework.time;
+                        document.getElementById('subject-input').value = homework.subject;
+                        document.getElementById('title-input').value = homework.title;
+                        document.getElementById('content-input').value = homework.content;
+                        
+                        // 设置编辑状态
+                        editingHomeworkId = id;
+                        
+                        // 更新按钮文本
+                        document.getElementById('add-card-btn').innerHTML = 
+                            '<i class="fas fa-save"></i> 保存修改';
+                        
+                        // 显示通知
+                        showNotification(`正在编辑 "${homework.title}"`);
+                        return;
+                    }
+                }
+                throw new Error('作业未找到');
+            } catch (error) {
+                showNotification(error.message, true);
+            }
+        }
+
+
+        // 切换科目展开状态
+        async function toggleSubject(subject) {
+            try {
+                const subjectState = getSubjectState();
+                subjectState[subject] = !subjectState[subject];
+                localStorage.setItem(SUBJECT_STATE_KEY, JSON.stringify(subjectState));
+                
+                // 刷新数据
+                fetchData();
+            } catch (error) {
+                showNotification(error.message, true);
+            }
+        }
+
+        // 获取作业数据
+        function getHomeworkData() {
+            const data = localStorage.getItem(HOMEWORK_DATA_KEY);
+            return data ? JSON.parse(data) : {};
+        }
+
+        // 保存作业数据
+        // 修改 saveHomeworkData 函数，确保保存到当前文件夹
+        async function saveHomeworkData(data) {
+            try {
+                // 获取当前目录下的文件句柄
+                const dirHandle = await window.showDirectoryPicker();
+                const fileHandle = await dirHandle.getFileHandle('homework_data.json', { create: true });
+                const writable = await fileHandle.createWritable();
+                await writable.write(JSON.stringify(data));
+                await writable.close();
+            } catch (error) {
+                console.error('保存失败:', error);
+                // 回退到 localStorage
+                localStorage.setItem(HOMEWORK_DATA_KEY, JSON.stringify(data));
+            }
+        }
+
+        // 获取科目状态
+        function getSubjectState() {
+            const data = localStorage.getItem(SUBJECT_STATE_KEY);
+            return data ? JSON.parse(data) : {};
+        }
+
+        // 渲染作业
+        function renderHomework(data) {
+            const container = document.getElementById('cards-container');
+            container.innerHTML = '';
+
+            const subjects = Object.keys(data);
+            const subjectState = getSubjectState();
+
+            if (subjects.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-book-open"></i>
+                        <h3>暂无作业</h3>
+                        <p>点击上方表单添加您的第一个作业，系统将自动按科目分类</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // 按科目分组渲染
+            subjects.forEach(subject => {
+                const subjectData = data[subject];
+                // 默认展开状态为true
+                const isExpanded = subjectState[subject] !== false;
+
+                const groupElement = document.createElement('div');
+                groupElement.className = 'subject-group';
+
+                groupElement.innerHTML = `
+                    <div class="subject-header" onclick="toggleSubject('${subject}')">
+                        <div class="subject-title">
+                            <i class="fas fa-book"></i>
+                            ${subject}
+                            <span class="subject-count">${subjectData.homeworks.length}</span>
+                        </div>
+                        <div class="toggle-icon">
+                            <i class="fas fa-chevron-${isExpanded ? 'up' : 'down'}"></i>
+                        </div>
+                    </div>
+                    <div class="subject-content" style="display: ${isExpanded ? 'grid' : 'none'}">
+                        ${subjectData.homeworks.map(hw => createHomeworkCardHTML(hw)).join('')}
+                    </div>
+                `;
+
+                container.appendChild(groupElement);
+            });
+        }
+
+    // 创建作业卡片HTML
+    function createHomeworkCardHTML(hw) {
+        // 生成附件HTML
+        let attachmentsHTML = '';
+        if (hw.attachments && hw.attachments.length > 0) {
+            attachmentsHTML = `
+                <div class="card-attachments">
+                    <div class="attachments-title">
+                        <i class="fas fa-paperclip"></i> 附件 (${hw.attachments.length})
+                    </div>
+					${hw.attachments.map(att => {
+					    // 移除了图片预览功能
+					    const filePath = `/uploads/${encodeURIComponent(att.filepath)}`;  // 移除了API_BASE_URL
+					    return `
+					        <div class="attachment-item">
+					            <div class="attachment-icon">
+					                <i class="${getFileIcon(att.filename)}"></i>
+					            </div>
+					            <div class="attachment-name">${att.filename}</div>
+					            <a class="attachment-download" title="下载" href="${filePath}" download="${att.filename}">
+					                <i class="fas fa-download"></i>
+					            </a>
+					        </div>
+					    `;
+                    }).join('')}
+                </div>
+            `;
+        }
+        
+        return `
+            <div class="article-card">
+                <div class="card-header">
+                    <div class="card-time">
+                        <i class="far fa-calendar"></i> ${hw.time}
+                    </div>
+                    <div class="card-subject">
+                        <i class="fas fa-book"></i> ${hw.subject}
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="edit-btn" onclick="editHomework(${hw.id})">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="delete-btn" onclick="deleteHomework(${hw.id})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+                <h2>${hw.title}</h2>
+                <p>${hw.content}</p>
+                
+                ${attachmentsHTML}  <!-- 这里渲染附件 -->
+                
+                <div class="card-footer">
+                    <div class="meta">
+                        <i class="far fa-clock"></i>
+                        添加于 ${new Date(hw.createdAt).toLocaleDateString()}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // 查看图片
+    function viewImage(imageData) {
+        const modal = document.getElementById('image-modal');
+        const modalImg = document.getElementById('modal-image');
+        
+        modalImg.src = imageData;
+        modal.style.display = 'block';
+    }
+
+    // 更新统计信息
+    function updateStats(data) {
+        const subjects = Object.keys(data);
+        let totalHomeworks = 0;
+        let attachmentCount = 0;
+
+        subjects.forEach(subject => {
+            const subjectData = data[subject];
+            totalHomeworks += subjectData.homeworks.length;
+            
+            subjectData.homeworks.forEach(hw => {
+                if (hw.attachments && hw.attachments.length > 0) {
+                    attachmentCount++;
+                }
+            });
+        });
+
+        document.getElementById('total-count').textContent = totalHomeworks;
+        document.getElementById('subject-count').textContent = subjects.length;
+        document.getElementById('attachment-count').textContent = attachmentCount;
+    }
+
+
+    // 修改 fetchData 函数
+    async function fetchData() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/homeworks`);
+            if (!response.ok) throw new Error('Network response was not ok');
+            
+            homeworkData = await response.json();
+            renderHomework(homeworkData);
+            updateStats(homeworkData);
+        } catch (error) {
+            showNotification('获取数据失败: ' + error.message, true);
+        }
+    }
+
+
+    // 显示通知
+    function showNotification(message, isError = false) {
+        const notification = document.getElementById('notification');
+        notification.textContent = message;
+        notification.className = 'notification' + (isError ? ' error' : '');
+        notification.classList.add('show');
+        
+        // 3秒后隐藏通知
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, 3000);
+    }
+    </script>
+</body>
+</html>

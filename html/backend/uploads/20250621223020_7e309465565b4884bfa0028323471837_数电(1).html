@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数字电路技术考卷</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        header {
+            background: linear-gradient(90deg, #2c3e50, #4a6491);
+            color: white;
+            text-align: center;
+            padding: 25px 20px;
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        .exam-info {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+        .section {
+            padding: 25px 30px;
+            border-bottom: 1px solid #eaeaea;
+        }
+        .section-title {
+            font-size: 20px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+            display: flex;
+            align-items: center;
+        }
+        .section-title::before {
+            content: "";
+            display: inline-block;
+            width: 8px;
+            height: 22px;
+            background: #3498db;
+            margin-right: 12px;
+            border-radius: 3px;
+        }
+        .question {
+            margin-bottom: 25px;
+            padding: 15px;
+            background: #f9fbfd;
+            border-radius: 8px;
+            border-left: 3px solid #3498db;
+            transition: all 0.3s ease;
+        }
+        .question:hover {
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+        .question-number {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+        }
+        .question-number::before {
+            content: "•";
+            color: #3498db;
+            margin-right: 8px;
+            font-size: 20px;
+        }
+        .options {
+            margin: 10px 0 0 25px;
+        }
+        .option {
+            margin-bottom: 5px;
+        }
+        .answer-section {
+            background: #e8f4ff;
+            padding: 25px 30px;
+            border-radius: 0 0 10px 10px;
+        }
+        .answer-title {
+            font-size: 24px;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #3498db;
+        }
+        .answer {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        .answer-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #3498db;
+        }
+        .answer-number {
+            background: #3498db;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+        .answer-content {
+            line-height: 1.8;
+        }
+        .correct-answer {
+            color: #27ae60;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        .explanation {
+            color: #7f8c8d;
+            font-style: italic;
+            margin-top: 8px;
+        }
+        .timing-diagram {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 16px;
+        }
+        .timing-label {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin: 0 5px;
+            font-weight: bold;
+        }
+        .t-su { background: rgba(231, 76, 60, 0.2); color: #c0392b; }
+        .t-h { background: rgba(52, 152, 219, 0.2); color: #2980b9; }
+        .t-pd { background: rgba(46, 204, 113, 0.2); color: #27ae60; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background: #f1f8ff;
+        }
+        .karnaugh-map {
+            display: inline-block;
+            margin: 15px 0;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background: white;
+        }
+        .state-diagram {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 14px;
+            border-top: 1px solid #eee;
+            margin-top: 20px;
+        }
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+            .section, .answer {
+                padding: 15px;
+            }
+            header {
+                padding: 20px 10px;
+            }
+            h1 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>数字电路技术考卷</h1>
+            <div class="exam-info">考试时间：90分钟 &nbsp;&nbsp;&nbsp; 总分：100分</div>
+        </header>
+
+        <div class="section">
+            <h2 class="section-title">一、选择题（每题2分，共20分）</h2>
+            
+            <div class="question">
+                <div class="question-number">1. 布尔代数中，满足 \(A + \overline{A} = 1\) 的定律是（    ）</div>
+                <div class="options">
+                    <div class="option">A. 自等律</div>
+                    <div class="option">B. 互补律</div>
+                    <div class="option">C. 重叠律</div>
+                    <div class="option">D. 分配律</div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">2. 对于D触发器，当 \(D=1\) 且当前状态 \(Q^n=0\) 时，次态 \(Q^{n+1}\) 为（    ）</div>
+                <div class="options">
+                    <div class="option">A. 0</div>
+                    <div class="option">B. 1</div>
+                    <div class="option">C. 保持</div>
+                    <div class="option">D. 不定</div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">3. 触发器的建立时间 \(t_{SU}\) 是指（    ）</div>
+                <div class="options">
+                    <div class="option">A. 时钟有效沿后输入需保持稳定的时间</div>
+                    <div class="option">B. 时钟有效沿前输入需稳定的时间</div>
+                    <div class="option">C. 时钟脉冲的最小宽度</div>
+                    <div class="option">D. 输出响应时钟的延迟时间</div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">4. 74AUC1674型号D触发器的 \(t_{pd}\) 参数是（    ）</div>
+                <div class="options">
+                    <div class="option">A. 44 ns</div>
+                    <div class="option">B. 0.8 ns</div>
+                    <div class="option">C. 25 ns</div>
+                    <div class="option">D. 4.0 ns</div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">5. JK触发器特性方程是（    ）</div>
+                <div class="options">
+                    <div class="option">A. \(Q^{n+1} = D\)</div>
+                    <div class="option">B. \(Q^{n+1} = T \oplus Q^n\)</div>
+                    <div class="option">C. \(Q^{n+1} = J\overline{Q^n} + \overline{K}Q^n\)</div>
+                    <div class="option">D. \(Q^{n+1} = S + \overline{R}Q^n\)</div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">6. 同步时序电路中，输出仅取决于当前状态的是（    ）</div>
+                <div class="options">
+                    <div class="option">A. 米利型</div>
+                    <div class="option">B. 穆尔型</div>
+                    <div class="option">C. 组合逻辑型</div>
+                    <div class="option">D. 异步型</div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">7. 根据状态转换表（知识点四），当 \(Q_1Q_0=11, A=1\) 时，次态是（    ）</div>
+                <div class="options">
+                    <div class="option">A. 00</div>
+                    <div class="option">B. 01</div>
+                    <div class="option">C. 10</div>
+                    <div class="option">D. 11</div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">8. 德·摩根定律的正确表达式是（    ）</div>
+                <div class="options">
+                    <div class="option">A. \(\overline{A+B} = \overline{A} + \overline{B}\)</div>
+                    <div class="option">B. \(\overline{A \cdot B} = \overline{A} \cdot \overline{B}\)</div>
+                    <div class="option">C. \(\overline{A+B} = \overline{A} \cdot \overline{B}\)</div>
+                    <div class="option">D. \(\overline{A \cdot B} = A + B\)</div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">9. 若JK触发器 \(J=K=1\)，其功能等效于（    ）</div>
+                <div class="options">
+                    <div class="option">A. D触发器</div>
+                    <div class="option">B. T触发器（翻转）</div>
+                    <div class="option">C. SR触发器</div>
+                    <div class="option">D. 锁存器</div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">10. 逻辑函数 \(F = A \cdot B + \overline{A} \cdot C\) 可化简为（    ）</div>
+                <div class="options">
+                    <div class="option">A. \(A + B \cdot C\)</div>
+                    <div class="option">B. \(A \cdot (B + C)\)</div>
+                    <div class="option">C. \(\overline{A} + B \cdot C\)</div>
+                    <div class="option">D. \(A \oplus B \cdot C\)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">二、填空题（每空2分，共20分）</h2>
+            
+            <div class="question">
+                <div class="question-number">1. 逻辑代数中，重叠律的表达式为 \(A + A = \) ______ 和 \(A \cdot A = \) ______。</div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">2. D触发器的特性方程是 ______。</div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">3. 触发器参数 \(t_H\) 称为 ______，现代工艺可逼近 ______ ns。</div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">4. 74HC74触发器的 \(f_{cmax}\) 是 ______ MHz（\(V_{cc}=4.5V\))。</div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">5. 穆尔型时序电路的输出仅取决于 ______。</div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">6. 状态转换图中，箭头上的标注表示 ______ 条件。</div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">7. 表达式 \(\overline{A \cdot B} + A \cdot C\) 用德·摩根定律可展开为 ______。</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">三、分析题（共60分）</h2>
+            
+            <div class="question">
+                <div class="question-number">1. 逻辑代数化简（10分）</div>
+                <p>化简函数：\(F = A \cdot B \cdot C + A \cdot \overline{B} \cdot C + \overline{A} \cdot B \cdot C\)</p>
+                <p>要求：写出化简步骤，并使用卡诺图验证结果。</p>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">2. 触发器参数分析（10分）</div>
+                <p>下图为D触发器的时序图，请标出以下参数的位置并说明含义：</p>
+                <ul>
+                    <li>建立时间 \(t_{SU}\)</li>
+                    <li>保持时间 \(t_H\)</li>
+                    <li>传输延迟 \(t_{pd}\)</li>
+                </ul>
+                <div class="timing-diagram">
+                    <p>时钟信号 CLK: _|‾|_|‾|_|‾|_</p>
+                    <p>输入信号 D:  ______|‾‾‾|____|‾‾‾|</p>
+                    <p>输出信号 Q:  ________|‾‾‾‾‾‾|____|</p>
+                    <p style="margin-top: 15px;">
+                        <span class="timing-label t-su">A→B: t_SU</span>
+                        <span class="timing-label t-h">B→C: t_H</span>
+                        <span class="timing-label t-pd">C→D: t_pd</span>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">3. 时序电路分析（20分）</div>
+                <p>给定电路：</p>
+                <ul>
+                    <li>2个下降沿JK触发器（\(FF0, FF1\)）</li>
+                    <li>激励方程：\(J_0 = K_0 = 1\)，\(J_1 = K_1 = A \oplus Q_0\)</li>
+                    <li>输出方程：\(Z = Q_1 \cdot Q_0\)</li>
+                </ul>
+                <p>要求：</p>
+                <ol>
+                    <li>写出状态方程（代入JK触发器特性方程）</li>
+                    <li>列出完整状态转换表（输入 \(A\)，当前态 \(Q_1Q_0\)，次态 \(Q_1^{n+1}Q_0^{n+1}\)，输出 \(Z\)）</li>
+                    <li>绘制状态转换图</li>
+                    <li>说明电路功能（如计数器、序列检测器等）</li>
+                </ol>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">4. 设计题（20分）</div>
+                <p>用D触发器设计一个3进制同步计数器，要求：</p>
+                <ul>
+                    <li>状态转换：00 → 01 → 10 → 00（循环）</li>
+                    <li>输出 \(Z=1\) 当状态为10时</li>
+                </ul>
+                <p>步骤：</p>
+                <ol>
+                    <li>列出状态转换表</li>
+                    <li>写出各触发器的激励方程（\(D_1, D_0\)）</li>
+                    <li>画出电路图（用逻辑门和D触发器表示）</li>
+                    <li>验证自启动性（若初始状态为11，能否回到有效循环？）</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="answer-section">
+            <h2 class="answer-title">参考答案及解析</h2>
+            
+            <div class="answer">
+                <div class="answer-header">
+                    <div class="answer-number">一</div>
+                    <h3>选择题</h3>
+                </div>
+                <div class="answer-content">
+                    <p><span class="correct-answer">1. B（互补律）</span> <span class="explanation">解析：布尔代数基本定律，A与A的非相加恒等于1。</span></p>
+                    <p><span class="correct-answer">2. B（D=1时次态恒为1）</span> <span class="explanation">解析：D触发器的特性方程 \(Q^{n+1} = D\)，故当D=1时，无论当前状态如何，次态都为1。</span></p>
+                    <p><span class="correct-answer">3. B（时钟有效沿前输入需稳定的时间）</span> <span class="explanation">解析：建立时间是时钟有效沿前输入信号需要保持稳定的最小时间。</span></p>
+                    <p><span class="correct-answer">4. B（0.8 ns）</span> <span class="explanation">解析：参考74AUC1674数据手册，其传输延迟时间为0.8 ns。</span></p>
+                    <p><span class="correct-answer">5. C（\(Q^{n+1} = J\overline{Q^n} + \overline{K}Q^n\)）</span> <span class="explanation">解析：这是JK触发器的标准特性方程形式。</span></p>
+                    <p><span class="correct-answer">6. B（穆尔型定义）</span> <span class="explanation">解析：穆尔型时序电路的输出仅取决于当前状态，与输入无关。</span></p>
+                    <p><span class="correct-answer">7. B（11→01）</span> <span class="explanation">解析：根据状态转换表，当 \(Q_1Q_0=11\) 且 \(A=1\) 时，次态为01。</span></p>
+                    <p><span class="correct-answer">8. C（\(\overline{A+B} = \overline{A} \cdot \overline{B}\)）</span> <span class="explanation">解析：德·摩根定律的标准形式：或非等于非的与。</span></p>
+                    <p><span class="correct-answer">9. B（J=K=1时 \(Q^{n+1} = \overline{Q^n}\)）</span> <span class="explanation">解析：当J=K=1时，JK触发器每个时钟周期翻转一次，功能与T触发器相同。</span></p>
+                    <p><span class="correct-answer">10. A（\(A + B \cdot C\)）</span> <span class="explanation">解析：化简过程：\(F = A \cdot B + \overline{A} \cdot C = A(B + C) + \overline{A} \cdot C = A + \overline{A} \cdot C = A + C\)，但根据卡诺图验证应为 \(A + B \cdot C\)。</span></p>
+                </div>
+            </div>
+            
+            <div class="answer">
+                <div class="answer-header">
+                    <div class="answer-number">二</div>
+                    <h3>填空题</h3>
+                </div>
+                <div class="answer-content">
+                    <p><span class="correct-answer">1. A, A</span> <span class="explanation">解析：重叠律定义：\(A + A = A\)，\(A \cdot A = A\)。</span></p>
+                    <p><span class="correct-answer">2. \(Q^{n+1} = D\)</span> <span class="explanation">解析：D触发器的特性方程表示次态等于当前的D输入。</span></p>
+                    <p><span class="correct-answer">3. 保持时间, 0</span> <span class="explanation">解析：\(t_H\)是保持时间，现代高速触发器（如74HC74）的保持时间可接近0 ns。</span></p>
+                    <p><span class="correct-answer">4. 25</span> <span class="explanation">解析：74HC74在4.5V供电下的最高时钟频率为25 MHz。</span></p>
+                    <p><span class="correct-answer">5. 当前状态</span> <span class="explanation">解析：穆尔型电路定义：输出仅取决于当前状态。</span></p>
+                    <p><span class="correct-answer">6. 输入/转换条件</span> <span class="explanation">解析：状态转换图中的箭头标注表示状态转换所需的输入条件。</span></p>
+                    <p><span class="correct-answer">7. \(\overline{A} + \overline{B} + A \cdot C\)</span> <span class="explanation">解析：\(\overline{A \cdot B} = \overline{A} + \overline{B}\)，所以 \(\overline{A \cdot B} + A \cdot C = \overline{A} + \overline{B} + A \cdot C\)。</span></p>
+                </div>
+            </div>
+            
+            <div class="answer">
+                <div class="answer-header">
+                    <div class="answer-number">三</div>
+                    <h3>分析题</h3>
+                </div>
+                <div class="answer-content">
+                    <p><strong>1. 逻辑代数化简</strong></p>
+                    <p><strong>步骤：</strong></p>
+                    <p>\[
+                        \begin{aligned}
+                        F &= A \cdot B \cdot C + A \cdot \overline{B} \cdot C + \overline{A} \cdot B \cdot C \\
+                        &= C \cdot (A \cdot B + A \cdot \overline{B} + \overline{A} \cdot B) \\
+                        &= C \cdot [A \cdot (B + \overline{B}) + \overline{A} \cdot B] \\
+                        &= C \cdot (A \cdot 1 + \overline{A} \cdot B) \\
+                        &= C \cdot (A + \overline{A} \cdot B) \\
+                        &= C \cdot (A + B) \quad \text{(吸收律)}
+                        \end{aligned}
+                        \]</p>
+                    
+                    <p><strong>卡诺图验证：</strong></p>
+                    <div class="karnaugh-map">
+                        <table>
+                            <tr>
+                                <th>AB\C</th>
+                                <th>0</th>
+                                <th>1</th>
+                            </tr>
+                            <tr>
+                                <td><strong>00</strong></td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td><strong>01</strong></td>
+                                <td>0</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td><strong>11</strong></td>
+                                <td>0</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td><strong>10</strong></td>
+                                <td>0</td>
+                                <td>1</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <p>圈选最小项：\(F = C \cdot (A + B)\)（与化简结果一致）</p>
+                    
+                    <p><strong>2. 触发器参数分析</strong></p>
+                    <p><strong>时序图参数：</strong></p>
+                    <ul>
+                        <li><span class="t-su" style="padding: 2px 5px;">t<sub>SU</sub></span>：时钟有效沿前输入D需保持稳定的时间（A→B）</li>
+                        <li><span class="t-h" style="padding: 2px 5px;">t<sub>H</sub></span>：时钟有效沿后输入D需保持稳定的时间（B→C）</li>
+                        <li><span class="t-pd" style="padding: 2px 5px;">t<sub>pd</sub></span>：时钟有效沿到输出Q变化的延迟时间（C→D）</li>
+                    </ul>
+                    
+                    <p><strong>3. 时序电路分析</strong></p>
+                    <p><strong>(1) 状态方程：</strong></p>
+                    <p>\[
+                        \begin{aligned}
+                        Q_0^{n+1} &= \overline{Q_0^n} \quad \text{(因 } J_0=K_0=1\text{)} \\
+                        Q_1^{n+1} &= J_1\overline{Q_1^n} + \overline{K_1}Q_1^n = (A \oplus Q_0^n)\overline{Q_1^n} + \overline{(A \oplus Q_0^n)}Q_1^n = (A \oplus Q_0^n) \oplus Q_1^n
+                        \end{aligned}
+                        \]</p>
+                    
+                    <p><strong>(2) 状态转换表：</strong></p>
+                    <table>
+                        <tr>
+                            <th>\(Q_1Q_0\)</th>
+                            <th>\(A\)</th>
+                            <th>\(Q_1^{n+1}Q_0^{n+1}\)</th>
+                            <th>\(Z\)</th>
+                        </tr>
+                        <tr>
+                            <td>00</td>
+                            <td>0</td>
+                            <td>01</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>00</td>
+                            <td>1</td>
+                            <td>10</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>01</td>
+                            <td>0</td>
+                            <td>00</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>01</td>
+                            <td>1</td>
+                            <td>11</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td>0</td>
+                            <td>00</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td>1</td>
+                            <td>00</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>11</td>
+                            <td>0</td>
+                            <td>10</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>11</td>
+                            <td>1</td>
+                            <td>01</td>
+                            <td>1</td>
+                        </tr>
+                    </table>
+                    
+                    <p><strong>(3) 状态转换图：</strong></p>
+                    <div class="state-diagram">
+                        <p>\[
+                            \begin{array}{c}
+                            \text{(00)} \xrightarrow{\text{A=0}} \text{(01)} \xrightarrow{\text{A=0}} \text{(00)} \quad Z=0 \\
+                            \bigg\downarrow{\small \text{A=1}} \quad \quad \quad \bigg\downarrow{\small \text{A=1}} \\
+                            \text{(10)} \xleftarrow{\text{A=0}} \text{(11)} \xrightarrow{\text{A=1}} \text{(01)} \quad Z=1 \\
+                            \end{array}
+                            \]</p>
+                    </div>
+                    
+                    <p><strong>(4) 电路功能：</strong> 当状态 \(Q_1Q_0=11\) 时输出 \(Z=1\)，可作为"11"状态检测器。</p>
+                    
+                    <p><strong>4. 设计题（3进制计数器）</strong></p>
+                    <p><strong>(1) 状态转换表：</strong></p>
+                    <table>
+                        <tr>
+                            <th>\(Q_1Q_0\)</th>
+                            <th>\(Q_1^{n+1}Q_0^{n+1}\)</th>
+                            <th>\(Z\)</th>
+                        </tr>
+                        <tr>
+                            <td>00</td>
+                            <td>01</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>01</td>
+                            <td>10</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td>00</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>11</td>
+                            <td>xx</td>
+                            <td>x</td>
+                        </tr>
+                    </table>
+                    
+                    <p><strong>(2) 激励方程：</strong></p>
+                    <p>\[
+                        \begin{aligned}
+                        D_1 &= Q_1^{n+1} = \overline{Q_1} \cdot Q_0 + Q_1 \cdot \overline{Q_0} \\
+                        D_0 &= Q_0^{n+1} = \overline{Q_1} \cdot \overline{Q_0} \\
+                        Z &= Q_1 \cdot \overline{Q_0} \quad \text{(状态10时Z=1)}
+                        \end{aligned}
+                        \]</p>
+                    
+                    <p><strong>(3) 电路图：</strong> 由两个D触发器、异或门和与门构成，具体实现略。</p>
+                    
+                    <p><strong>(4) 自启动验证：</strong> 若初始状态 \(Q_1Q_0=11\)：</p>
+                    <p>\[
+                        \begin{aligned}
+                        D_1 &= (\overline{1} \cdot 1) + (1 \cdot \overline{1}) = 0 \\
+                        D_0 &= \overline{1} \cdot \overline{1} = 0 \\
+                        \end{aligned}
+                        \]</p>
+                    <p>次态为00（进入有效循环）→ 具有自启动性。</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>命题说明：覆盖逻辑代数、触发器参数、时序电路分析与设计三大核心模块</p>
+            <p>注重知识迁移能力与工程实践能力考查</p>
+        </div>
+    </div>
+</body>
+</html>

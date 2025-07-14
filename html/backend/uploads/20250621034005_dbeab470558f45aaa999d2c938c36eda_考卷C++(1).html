@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++知识点测试卷</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            color: #333;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, #ff8a00, #e52e71, #1a2a6c);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eaeaea;
+        }
+        
+        h1 {
+            color: #1a2a6c;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .subtitle {
+            color: #e52e71;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+        
+        .exam-info {
+            display: flex;
+            justify-content: space-between;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-size: 0.95rem;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding: 20px;
+            border-radius: 10px;
+            background: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-5px);
+        }
+        
+        .section-title {
+            color: #e52e71;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eaeaea;
+        }
+        
+        .question {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-left: 4px solid #1a2a6c;
+            background: #f8f9fa;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .question-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .question-title span {
+            background: #1a2a6c;
+            color: white;
+            width: 28px;
+            height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin-right: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .options {
+            margin-left: 20px;
+        }
+        
+        .option {
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .option input {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        
+        .option label {
+            cursor: pointer;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        .code-input {
+            background: #2d2d2d;
+            color: #ff9d45;
+            border: 1px solid #444;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            width: 100%;
+            margin: 10px 0;
+            font-size: 1rem;
+        }
+        
+        .code-highlight {
+            background: #ff9d45;
+            color: #2d2d2d;
+            padding: 0 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        
+        .submit-area {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(to right, #ff8a00, #e52e71);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(229, 46, 113, 0.4);
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(229, 46, 113, 0.6);
+        }
+        
+        .submit-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .tip {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .tip-title {
+            color: #0d47a1;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .section {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>C++ 知识点测试卷</h1>
+            <div class="subtitle">湖州师范学院 · 计算机科学与技术专业</div>
+            <div class="exam-info">
+                <div><strong>作者：</strong> 高强</div>
+                <div><strong>考试时间：</strong> 90分钟</div>
+                <div><strong>总分：</strong> 100分</div>
+            </div>
+        </header>
+        
+        <div class="tip">
+            <div class="tip-title">考试说明</div>
+            <p>本试卷包含判断题、代码补全题和微型编程题。请仔细阅读题目要求，在指定位置作答。考试结束后请点击提交按钮。</p>
+        </div>
+        
+        <!-- 判断题 -->
+        <section class="section">
+            <h2 class="section-title">判断题 (5题，每题2分，共10分)</h2>
+            
+            <div class="question">
+                <div class="question-title"><span>1</span> 缺省形参必须放在非缺省形参右侧。</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q1" id="q1-true">
+                        <label for="q1-true">正确</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q1" id="q1-false">
+                        <label for="q1-false">错误</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title"><span>2</span> 函数重载时，返回值类型不同可构成重载。</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q2" id="q2-true">
+                        <label for="q2-true">正确</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q2" id="q2-false">
+                        <label for="q2-false">错误</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title"><span>3</span> 常对象只能调用常成员函数。</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q3" id="q3-true">
+                        <label for="q3-true">正确</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q3" id="q3-false">
+                        <label for="q3-false">错误</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title"><span>4</span> 虚基类构造函数优先于所有非虚基类执行。</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q4" id="q4-true">
+                        <label for="q4-true">正确</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q4" id="q4-false">
+                        <label for="q4-false">错误</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title"><span>5</span> 静态成员函数内可使用 <code>this</code> 指针。</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q5" id="q5-true">
+                        <label for="q5-true">正确</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q5" id="q5-false">
+                        <label for="q5-false">错误</label>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 代码补全题 -->
+        <section class="section">
+            <h2 class="section-title">代码补全题 (3题，每题5分，共15分)</h2>
+            
+            <div class="question">
+                <div class="question-title"><span>1</span> 默认参数错误修正</div>
+                <div class="code-block">
+                    int add(int x = 1, int y, int z = 6); <span class="code-highlight">// 修复此行</span>
+                </div>
+                <input type="text" class="code-input" placeholder="在此处输入修正后的代码">
+            </div>
+            
+            <div class="question">
+                <div class="question-title"><span>2</span> 类静态成员初始化</div>
+                <div class="code-block">
+class Counter {
+public:
+    static int count;
+    Counter() { count++; }
+};
+<span class="code-highlight">// 在类外初始化静态成员 count</span>
+_________ = 0; 
+                </div>
+                <input type="text" class="code-input" placeholder="在此处输入补全的代码">
+            </div>
+            
+            <div class="question">
+                <div class="question-title"><span>3</span> 派生类构造函数</div>
+                <div class="code-block">
+class Base {
+public:
+    Base(int a) : data(a) {}
+protected:
+    int data;
+};
+
+class Derived : public Base {
+public:
+    Derived(int a, string s) : <span class="code-highlight">___________{}</span> // 补全初始化列表
+private:
+    string text;
+};
+                </div>
+                <input type="text" class="code-input" placeholder="在此处输入补全的代码">
+            </div>
+        </section>
+        
+        <!-- 微型编程题 -->
+        <section class="section">
+            <h2 class="section-title">微型编程题 (2题，每题10分，共20分)</h2>
+            
+            <div class="question">
+                <div class="question-title"><span>1</span> 操作符重载</div>
+                <p>实现 Point 类的 + 运算符（成员函数）和 << 输出（友元函数）：</p>
+                <div class="code-block">
+class Point {
+    int x, y;
+public:
+    Point(int x, int y) : x(x), y(y) {}
+    
+    <span class="code-highlight">// 补全运算符重载</span>
+    ________ operator+(const Point& rhs) { 
+        return ________; 
+    }
+    
+    friend ostream& ________(ostream& os, const Point& p);
+};
+
+<span class="code-highlight">// 补全友元函数</span>
+ostream& operator<<(ostream& os, const Point& p) {
+    os << "(" << p.x << "," << p.y << ")";
+    return os;
+}
+                </div>
+                <input type="text" class="code-input" placeholder="第一空：返回类型">
+                <input type="text" class="code-input" placeholder="第二空：返回语句">
+                <input type="text" class="code-input" placeholder="第三空：函数名">
+            </div>
+            
+            <div class="question">
+                <div class="question-title"><span>2</span> 虚函数与多态</div>
+                <p>补全派生类对纯虚函数的重写：</p>
+                <div class="code-block">
+class Shape {
+public:
+    virtual void draw() = 0; // 纯虚函数
+};
+
+class Circle : public Shape {
+    <span class="code-highlight">// 重写 draw() 函数，输出 "Drawing Circle"</span>
+    ________ void draw() ________ {
+        ________
+    }
+};
+                </div>
+                <input type="text" class="code-input" placeholder="第一空：访问修饰符">
+                <input type="text" class="code-input" placeholder="第二空：函数修饰符">
+                <input type="text" class="code-input" placeholder="第三空：函数体">
+            </div>
+        </section>
+        
+        <div class="submit-area">
+            <button class="submit-btn">提交试卷</button>
+        </div>
+        
+        <footer>
+            <p>© 2024 湖州师范学院计算机科学与技术系 | C++程序设计考试</p>
+        </footer>
+    </div>
+    
+    <script>
+        document.querySelector('.submit-btn').addEventListener('click', function() {
+            // 检查是否所有题目都有答案
+            let allAnswered = true;
+            
+            // 检查判断题
+            for (let i = 1; i <= 5; i++) {
+                if (!document.querySelector(`input[name="q${i}"]:checked`)) {
+                    allAnswered = false;
+                    break;
+                }
+            }
+            
+            // 检查代码补全题
+            const codeInputs = document.querySelectorAll('.code-input');
+            for (let input of codeInputs) {
+                if (!input.value.trim()) {
+                    allAnswered = false;
+                    break;
+                }
+            }
+            
+            if (!allAnswered) {
+                alert('请完成所有题目后再提交！');
+                return;
+            }
+            
+            // 评分逻辑（此处仅模拟）
+            alert('试卷已提交！系统正在评分...\n\n提示：实际考试中，请将答案写在答题纸上。');
+        });
+    </script>
+</body>
+</html>

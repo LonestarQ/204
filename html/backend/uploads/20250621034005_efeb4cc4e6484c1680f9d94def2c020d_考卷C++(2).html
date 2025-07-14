@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++综合能力测试卷</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a237e, #4a148c, #0d47a1);
+            color: #333;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .header {
+            background: linear-gradient(90deg, #1a237e, #4a148c);
+            color: white;
+            padding: 25px 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(30deg);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .exam-info {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            position: relative;
+            z-index: 2;
+            font-size: 0.95rem;
+        }
+        
+        .section {
+            padding: 30px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+        }
+        
+        .section-title {
+            color: #4a148c;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            background: #4a148c;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .question {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f9f9ff;
+            border-radius: 10px;
+            border-left: 4px solid #5c6bc0;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .question:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(92, 107, 192, 0.2);
+        }
+        
+        .question-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            color: #1a237e;
+        }
+        
+        .question-title .number {
+            background: #5c6bc0;
+            color: white;
+            width: 28px;
+            height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin-right: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .options {
+            margin-left: 10px;
+        }
+        
+        .option {
+            margin: 12px 0;
+            padding: 10px 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .option:hover {
+            border-color: #5c6bc0;
+            background: #f0f4ff;
+        }
+        
+        .option input {
+            margin-right: 15px;
+            cursor: pointer;
+        }
+        
+        .code-block {
+            background: #2d2d3d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-size: 1rem;
+            line-height: 1.6;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        .code-keyword {
+            color: #ff79c6;
+        }
+        
+        .code-type {
+            color: #8be9fd;
+        }
+        
+        .code-comment {
+            color: #6272a4;
+        }
+        
+        .code-highlight {
+            background: rgba(255, 184, 108, 0.2);
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        
+        .answer-area {
+            margin-top: 15px;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 1rem;
+            min-height: 100px;
+            resize: vertical;
+            transition: border 0.3s;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #5c6bc0;
+            box-shadow: 0 0 0 2px rgba(92, 107, 192, 0.2);
+        }
+        
+        .programming-question {
+            background: #f0f7ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .points {
+            background: #e3f2fd;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            font-size: 0.95rem;
+        }
+        
+        .points-title {
+            font-weight: bold;
+            color: #0d47a1;
+            margin-bottom: 5px;
+        }
+        
+        .submit-area {
+            text-align: center;
+            padding: 30px;
+            background: #f5f7ff;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(to right, #3949ab, #7b1fa2);
+            color: white;
+            border: none;
+            padding: 16px 45px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(123, 31, 162, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .submit-btn::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(30deg);
+            transition: all 0.5s ease;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(123, 31, 162, 0.6);
+        }
+        
+        .submit-btn:hover::after {
+            transform: rotate(30deg) translate(20%, 20%);
+        }
+        
+        .submit-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #1a237e;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .section {
+                padding: 20px 15px;
+            }
+            
+            .code-block {
+                padding: 15px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>C++综合能力测试卷</h1>
+            <div class="subtitle">湖州师范学院 · 计算机科学与技术专业</div>
+            <div class="exam-info">
+                <div><i class="fas fa-user"></i> <strong>考生姓名：</strong> ___________</div>
+                <div><i class="fas fa-clock"></i> <strong>考试时间：</strong> 120分钟</div>
+                <div><i class="fas fa-star"></i> <strong>总分：</strong> 100分</div>
+            </div>
+        </div>
+        
+        <!-- 选择题部分 -->
+        <div class="section">
+            <h2 class="section-title"><i class="fas fa-check-circle"></i> 选择题 (10题，每题2分，共20分)</h2>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span class="number">1</span> 关于默认参数函数，以下代码正确的是：
+                </div>
+                <div class="code-block">
+                    A. <span class="code-keyword">int</span> func(<span class="code-keyword">int</span> a=1, <span class="code-keyword">int</span> b);<br>
+                    B. <span class="code-keyword">int</span> func(<span class="code-keyword">int</span> a, <span class="code-keyword">int</span> b=5);<br>
+                    C. <span class="code-keyword">int</span> func(<span class="code-keyword">int</span> a=1, <span class="code-keyword">int</span> b, <span class="code-keyword">int</span> c=2);
+                </div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q1" id="q1-a">
+                        <label for="q1-a">A</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q1" id="q1-b">
+                        <label for="q1-b">B</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q1" id="q1-c">
+                        <label for="q1-c">C</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span class="number">2</span> 下列函数重载合法的是：
+                </div>
+                <div class="code-block">
+                    A. <span class="code-type">float</span> calc(<span class="code-keyword">int</span> x);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-type">int</span> calc(<span class="code-keyword">int</span> x);<br>
+                    B. <span class="code-keyword">void</span> show();<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">void</span> show(<span class="code-keyword">int</span> a);<br>
+                    C. <span class="code-keyword">void</span> func(<span class="code-keyword">int</span> a);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">void</span> func(<span class="code-keyword">int</span> a, <span class="code-keyword">int</span> b=0);
+                </div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q2" id="q2-a">
+                        <label for="q2-a">A</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q2" id="q2-b">
+                        <label for="q2-b">B</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q2" id="q2-c">
+                        <label for="q2-c">C</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span class="number">3</span> 内联函数的特点错误的是：
+                </div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q3" id="q3-a">
+                        <label for="q3-a">A. 适合复杂循环逻辑</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q3" id="q3-b">
+                        <label for="q3-b">B. 定义通常在头文件</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q3" id="q3-c">
+                        <label for="q3-c">C. 编译器可忽略inline请求</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span class="number">4</span> 关于引用，错误的是：
+                </div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q4" id="q4-a">
+                        <label for="q4-a">A. <code>int &r; r = a;</code></label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q4" id="q4-b">
+                        <label for="q4-b">B. 引用必须初始化</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q4" id="q4-c">
+                        <label for="q4-c">C. 引用是变量的别名</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span class="number">5</span> <code>delete[]</code> 用于释放：
+                </div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q5" id="q5-a">
+                        <label for="q5-a">A. 单个对象</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q5" id="q5-b">
+                        <label for="q5-b">B. 动态数组</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q5" id="q5-c">
+                        <label for="q5-c">C. 静态成员</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 简答题部分 -->
+        <div class="section">
+            <h2 class="section-title"><i class="fas fa-edit"></i> 简答题 (5题，每题4分，共20分)</h2>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span class="number">1</span> 常数据成员为什么必须在初始化列表初始化？
+                </div>
+                <div class="answer-area">
+                    <textarea placeholder="在此处输入您的答案..."></textarea>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span class="number">2</span> 静态成员函数能否访问非静态成员？为什么？
+                </div>
+                <div class="answer-area">
+                    <textarea placeholder="在此处输入您的答案..."></textarea>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span class="number">3</span> 拷贝构造函数的调用场景有哪些？
+                </div>
+                <div class="answer-area">
+                    <textarea placeholder="在此处输入您的答案..."></textarea>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span class="number">4</span> 虚基类解决什么问题？
+                </div>
+                <div class="answer-area">
+                    <textarea placeholder="在此处输入您的答案..."></textarea>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span class="number">5</span> 虚函数与纯虚函数的区别？
+                </div>
+                <div class="answer-area">
+                    <textarea placeholder="在此处输入您的答案..."></textarea>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 程序阅读题部分 -->
+        <div class="section">
+            <h2 class="section-title"><i class="fas fa-code"></i> 程序阅读题 (2题，每题10分，共20分)</h2>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span class="number">1</span> 分析以下程序的输出结果：
+                </div>
+                <div class="code-block">
+<span class="code-keyword">#include</span> &lt;iostream&gt;
+<span class="code-keyword">using namespace</span> std;
+
+<span class="code-keyword">class</span> <span class="code-type">Base</span> {
+<span class="code-keyword">public</span>:
+    Base() { cout << <span class="code-highlight">"Base-"</span>; }
+    <span class="code-keyword">virtual</span> ~Base() { cout << <span class="code-highlight">"~Base"</span>; }
+};
+
+<span class="code-keyword">class</span> <span class="code-type">Derived</span> : <span class="code-keyword">public</span> Base {
+<span class="code-keyword">public</span>:
+    Derived() : Base() { cout << <span class="code-highlight">"Derived-"</span>; }
+    ~Derived() { cout << <span class="code-highlight">"~Derived-"</span>; }
+};
+
+<span class="code-keyword">int</span> main() {
+    Base* p = <span class="code-keyword">new</span> Derived();
+    <span class="code-keyword">delete</span> p;
+    <span class="code-keyword">return</span> 0;
+}
+                </div>
+                <div class="answer-area">
+                    <textarea placeholder="在此处输入您的答案..."></textarea>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span class="number">2</span> 指出以下代码中的错误并修正：
+                </div>
+                <div class="code-block">
+<span class="code-keyword">class</span> <span class="code-type">Student</span> {
+    <span class="code-keyword">const int</span> id;
+    <span class="code-keyword">static int</span> count;
+<span class="code-keyword">public</span>:
+    Student(<span class="code-keyword">int</span> id) {
+        <span class="code-highlight">this->id = id;</span>  <span class="code-comment">// 错误1</span>
+        count++; 
+    }
+    <span class="code-keyword">static void</span> printCount() { 
+        cout << <span class="code-highlight">id</span>;  <span class="code-comment">// 错误2</span>
+    }
+};
+<span class="code-keyword">int</span> Student::count = 0;
+                </div>
+                <div class="answer-area">
+                    <textarea placeholder="在此处输入您的修正代码..."></textarea>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 编程题部分 -->
+        <div class="section">
+            <h2 class="section-title"><i class="fas fa-laptop-code"></i> 编程题 (3题，共40分)</h2>
+            
+            <div class="programming-question">
+                <div class="question-title">
+                    <span class="number">1</span> 实现日期类 (15分)
+                </div>
+                <div class="points">
+                    <div class="points-title">要求：</div>
+                    <ul>
+                        <li>私有成员：<code>year</code>, <code>month</code>, <code>day</code></li>
+                        <li>公有函数：构造函数（带默认参数）、拷贝构造、<code>print()</code>常函数</li>
+                        <li>静态成员<code>count</code>统计对象数量</li>
+                    </ul>
+                </div>
+                <div class="answer-area">
+                    <textarea placeholder="在此处编写您的代码..."></textarea>
+                </div>
+            </div>
+            
+            <div class="programming-question">
+                <div class="question-title">
+                    <span class="number">2</span> 运算符重载 (15分)
+                </div>
+                <div class="points">
+                    <div class="points-title">要求：</div>
+                    <p>实现<code>Vector</code>类的<code>+</code>（加法）和<code>&lt;&lt;</code>（输出）运算符</p>
+                </div>
+                <div class="answer-area">
+                    <textarea placeholder="在此处编写您的代码..."></textarea>
+                </div>
+            </div>
+            
+            <div class="programming-question">
+                <div class="question-title">
+                    <span class="number">3</span> 多态应用 (20分)
+                </div>
+                <div class="points">
+                    <div class="points-title">要求：</div>
+                    <p>实现图形基类<code>Shape</code>和派生类<code>Circle</code>：</p>
+                    <ul>
+                        <li><code>Shape</code>类包含纯虚函数<code>area()</code></li>
+                        <li><code>Circle</code>类继承<code>Shape</code>并实现<code>area()</code></li>
+                        <li>编写测试函数验证多态性</li>
+                    </ul>
+                </div>
+                <div class="answer-area">
+                    <textarea placeholder="在此处编写您的代码..."></textarea>
+                </div>
+            </div>
+        </div>
+        
+        <div class="submit-area">
+            <button class="submit-btn">提交试卷</button>
+        </div>
+        
+        <div class="footer">
+            <p>© 2024 湖州师范学院计算机科学与技术系 | C++程序设计考试</p>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('.submit-btn').addEventListener('click', function() {
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 提交中...';
+            this.disabled = true;
+            
+            setTimeout(() => {
+                alert('试卷提交成功！\n\n您的答案已保存，请等待评分结果。');
+                this.innerHTML = '<i class="fas fa-check"></i> 已提交';
+            }, 1500);
+        });
+        
+        // 添加代码编辑器效果
+        const textareas = document.querySelectorAll('textarea');
+        textareas.forEach(textarea => {
+            textarea.addEventListener('focus', function() {
+                this.style.backgroundColor = '#fffff0';
+                this.style.boxShadow = '0 0 8px rgba(92, 107, 192, 0.3)';
+            });
+            
+            textarea.addEventListener('blur', function() {
+                this.style.backgroundColor = '';
+                this.style.boxShadow = '';
+            });
+        });
+    </script>
+</body>
+</html>
